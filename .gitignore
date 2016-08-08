@@ -1,0 +1,13 @@
+.idea/
+.settings/
+.project
+.classpath
+*.iml
+*.class
+target/
+nb-configuration.xml
+nb_jr_remoting.cfg
+rebel.xml
+.externalToolBuilders/
+/bin/
+/pom.xml
