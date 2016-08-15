@@ -50,14 +50,14 @@ public class SqlUtil {
 	 * @return the number of entities updated or deleted
 	 */
 	public static int executeUpdateByNativeQuery(EntityManager em, String sql, Object[] paramValue) {
-		if (log.isInfoEnabled()) {
+		if (log.isDebugEnabled()) {
 			StringBuffer sb = new StringBuffer();
 			sb.append("SqlUtil executeUpdate:\t").append(sql);
 			sb.append("\nparams:");
 			for (Object p : paramValue) {
 				sb.append(p == null ? "null" : sb.toString()).append("\t");
 			}
-			log.info(sb.toString());
+			log.debug(sb.toString());
 		}
 
 		try {
@@ -96,14 +96,14 @@ public class SqlUtil {
 	 * @return the number of entities updated or deleted
 	 */
 	public static int executeUpdate(Connection conn, String sql, boolean closeConn, Object... paramValue) {
-		if (log.isInfoEnabled()) {
+		if (log.isDebugEnabled()) {
 			StringBuffer sb = new StringBuffer();
 			sb.append("SqlUtil executeUpdate:\t").append(sql);
 			sb.append("\nparams:");
 			for (Object p : paramValue) {
 				sb.append(p == null ? "null" : sb.toString()).append("\t");
 			}
-			log.info(sb.toString());
+			log.debug(sb.toString());
 		}
 
 		PreparedStatement pstm = null;
@@ -154,7 +154,9 @@ public class SqlUtil {
 	 * @return
 	 */
 	public static int[] batchUpdate(Connection conn, String sql, Collection<Object[]> paramValues, boolean closeConn) {
-		log.info("SqlUtil batchUpdate:\t" + sql + "\t params:" + paramValues.size());
+		if(log.isDebugEnabled()){
+			log.debug("SqlUtil batchUpdate:\t" + sql + "\t params:" + paramValues.size());
+		}
 		PreparedStatement pstm = null;
 		try {
 			pstm = conn.prepareStatement(sql);
