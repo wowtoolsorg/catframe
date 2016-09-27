@@ -1,6 +1,8 @@
 package org.wowtools.common.utils;
 
+import java.io.BufferedReader;
 import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.net.URL;
 import java.net.URLConnection;
 import java.util.LinkedList;
@@ -20,9 +22,11 @@ public class SimpleHttpUtil {
 	 * @return URL 所代表远程资源的响应结果
 	 */
 	public static String sendGet(String url) {
-		InputStream ins = null;
+		String result;
+		BufferedReader in = null;
 		try {
-			URL realUrl = new URL(url);
+			String urlNameString = url;
+			URL realUrl = new URL(urlNameString);
 			// 打开和URL之间的连接
 			URLConnection connection = realUrl.openConnection();
 			// 设置通用的请求属性
@@ -32,30 +36,26 @@ public class SimpleHttpUtil {
 			// 建立实际的连接
 			connection.connect();
 			// 定义 BufferedReader输入流来读取URL的响应
-			ins = connection.getInputStream();
-			int b = ins.read();
-			LinkedList<Byte> bList = new LinkedList<>();
-			while (b > 0) {
-				bList.add((byte) b);
-				b = ins.read();
+			in = new BufferedReader(new InputStreamReader(connection.getInputStream()));
+			StringBuilder sb = new StringBuilder();
+			String line;
+			while ((line = in.readLine()) != null) {
+				sb.append(line);
 			}
-			byte[] bs = new byte[bList.size()];
-			int i = 0;
-			for (byte bt : bList) {
-				bs[i] = bt;
-				i++;
-			}
-			return new String(bs);
+			result = sb.toString();
 		} catch (Exception e) {
 			throw new RuntimeException(e);
-		} finally {
+		}
+		// 使用finally块来关闭输入流
+		finally {
 			try {
-				if (ins != null) {
-					ins.close();
+				if (in != null) {
+					in.close();
 				}
 			} catch (Exception e2) {
 				e2.printStackTrace();
 			}
 		}
+		return result;
 	}
 }
