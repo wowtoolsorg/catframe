@@ -26,8 +26,7 @@ public class SimpleHttpUtil {
 		InputStream connIn = null;
 		InputStreamReader ir = null;
 		try {
-			String urlNameString = url;
-			URL realUrl = new URL(urlNameString);
+			URL realUrl  = new URL(url);
 			// 打开和URL之间的连接
 			URLConnection connection = realUrl.openConnection();
 			// 设置通用的请求属性

@@ -48,15 +48,24 @@ public class ResourcesReader {
 	public static String readInProject(Class<?> clazz, String path) {
 		String basePath = clazz.getClassLoader().getResource("/") != null
 				? clazz.getClassLoader().getResource("/").getPath() : clazz.getResource("/").getPath();
+		return readFileStr(basePath + path);
+	}
+	
+	/**
+	 * 读取文件中的字符串
+	 * @param path
+	 * @return
+	 */
+	public static String readFileStr(String path){
 		InputStream is = null;
 		try {
-			is = new FileInputStream(basePath + path);
+			is = new FileInputStream(path);
 			byte b[] = new byte[is.available()];
 			is.read(b);
 			String res = new String(b);
 			return res;
 		} catch (Exception e) {
-			throw new RuntimeException("读取配置文件异常", e);
+			throw new RuntimeException("读取文件异常", e);
 		} finally {
 			if (null != is) {
 				try {
