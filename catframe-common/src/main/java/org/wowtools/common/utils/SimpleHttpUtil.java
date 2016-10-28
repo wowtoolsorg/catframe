@@ -5,7 +5,6 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.net.URL;
 import java.net.URLConnection;
-import java.util.LinkedList;
 
 /**
  * 简单的http请求工具类
@@ -24,6 +23,8 @@ public class SimpleHttpUtil {
 	public static String sendGet(String url) {
 		String result;
 		BufferedReader in = null;
+		InputStream connIn = null;
+		InputStreamReader ir = null;
 		try {
 			String urlNameString = url;
 			URL realUrl = new URL(urlNameString);
@@ -36,7 +37,9 @@ public class SimpleHttpUtil {
 			// 建立实际的连接
 			connection.connect();
 			// 定义 BufferedReader输入流来读取URL的响应
-			in = new BufferedReader(new InputStreamReader(connection.getInputStream()));
+			connIn =connection.getInputStream();
+			ir = new InputStreamReader(connIn);
+			in = new BufferedReader(ir);
 			StringBuilder sb = new StringBuilder();
 			String line;
 			while ((line = in.readLine()) != null) {
@@ -55,6 +58,21 @@ public class SimpleHttpUtil {
 			} catch (Exception e2) {
 				e2.printStackTrace();
 			}
+			try {
+				if (ir != null) {
+					ir.close();
+				}
+			} catch (Exception e2) {
+				e2.printStackTrace();
+			}
+			try {
+				if (connIn != null) {
+					connIn.close();
+				}
+			} catch (Exception e2) {
+				e2.printStackTrace();
+			}
+			
 		}
 		return result;
 	}

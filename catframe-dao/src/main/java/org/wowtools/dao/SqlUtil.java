@@ -159,6 +159,7 @@ public class SqlUtil {
 		}
 		PreparedStatement pstm = null;
 		try {
+			conn.setAutoCommit(false);
 			pstm = conn.prepareStatement(sql);
 			for (Object[] args : paramValues) {
 				int i = 1;
@@ -168,7 +169,9 @@ public class SqlUtil {
 				}
 				pstm.addBatch();
 			}
-			return pstm.executeBatch();
+			int[] res = pstm.executeBatch();
+			conn.commit();
+			return res;
 		} catch (Exception e) {
 			throw new RuntimeException(e);
 		} finally {
@@ -177,6 +180,10 @@ public class SqlUtil {
 					pstm.close();
 				} catch (Exception e) {
 				}
+			}
+			try {
+				conn.setAutoCommit(true);
+			} catch (SQLException e1) {
 			}
 			if (closeConn && null != conn) {
 				try {
